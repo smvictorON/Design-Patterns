@@ -1,0 +1,112 @@
+- Padrão Criacional
+Como serão criados cada parte do nosso código/classes de forma flexivel e objectiva.
+
+- Padrão Estrutural
+Como serão organizadas as estruturas de um projeto complementando o padrão criacional.
+
+- Padrão Comportamental
+Como a nossa estrutura e código vai se comportar de forma performática no projeto.
+
+*** todo padrão tem um objetivo, não deve se forçar um design pattern em algo que não necessite,
+também não se deve ter preferencia por um ou outro design pattern todos estão a nosso favor.
+
+- ORM (object relational mapping)
+Ferramenta que possibilita trabalhar com varios bancos, sem engessar o código para somente um
+banco e tambem oferece algumas ferramentas para facilitar a integração. (Ex: Mongoose(NoSQL), Sequelize(SQL))
+
+- DRY (dont repeat yourself)
+Se um trecho de código precisa ser copiado exatamente igual para outro lugar, esse código deve
+ser centralizado em um lugar e ser usado em ambos para facilitar a manutenção.
+
+--- SOLID (SRP - OCP - LSP - ISP - DIP)
+Princípios citados por Robert Martin(Uncle Bob) porém reunidos e nomeado por Michael Feathers.
+
+- SRP(single responsability principle)
+Princípio da responsabilidade unica.
+"Nunca deve havar mais de um motivo para uma classe mudar".
+Significa que um classe deve ser especialista em só um assunto, ter um objetivo e não agregar coisas que não
+fazem sentido.
+Ex: (classe Cliente e classe Notify)
+
+- OCP(open closed principle)
+Princípio aberto/fechado.
+"Aberto para extensão e fechado para modificação".
+Significa que se classe ja estiver relacionada com outra parte do sistema, ela nao deve ser modificada
+se precisar ser modificada deve ser fazer outra classe com a alteração. Ex: (v1 e v2)
+
+- LSP(liskov substitution princple)
+Princípio da substituição de Liskov.
+"Uma classe derivada pode ser substituível por sua classe base".
+Foi estabelecido por Barbara Liskov, uma classe que se extende deve ser comportar com sua classe pai.
+Ex: (classe Carro e classe Sedan, a classe Sedan deve ter o método Ligar igual ao do pai, podendo
+a classe Sedan substituir a classe Carro sem causar problemas)
+
+- ISP(inteface segregation principle)
+Princípio de segregação de interfaces.
+"Classes não devem ser forçadas a depender de métodos que não usam".
+Pode ser aplicada tanto em classes abstratas quanto em interfaces, semelhante ao primeiro princípio,
+quebrar as coisas para que fiquem mais objetivas.
+Ex: (ao invés de IVehicle com tudo, criar a ICar e IMoto com suas especificidades)
+
+- DIP(dependecy inversion principle)
+Princípio da inversão de dependencias.
+"Módulos de alto nível não deve depender de módulos de baixo nível. Ambos devem
+depender de abstrações; Abstrações não devem depender de detalhes".
+
+*** Módulo de alto nível tem as regras de negócios do sistema. Ex: (classe Produto que tem acesso ao DataAccess e Auth)
+*** Módulo de baixo nível cuida de execução através da classe de alto nível. Ex: (Auth e DataAccess)
+
+Mas isso pode ser relativo pois o SQL pode ter duas classes que faça a execução para ele. Ex: (Mongo, Mysql)
+Então em relação a essas duas o DataAccess está em alto nível.
+
+---------- Criacionais ----------
+
+- Factory Method
+  PROBLEMA: Pense no começo do Uber onde o objectivo da aplicação era contratar Carros para levar Pessoas após um tempo o uber resolve
+implantar o Uber Eats que vai permitir entrega de Moto e Bicicleta, porém a aplicação está amarrada esperando receber somente
+Carro para Pessoas, como podemos fazer um bom código que aceite essa mudança?
+  SOLUÇÃO: Atráves do Factory Method podemos substituir todas nossas chamadas diretas de classes (new SuaClasse) por factories, que vão
+se encarregar de devolver a instancia correta, Ex: (uma factory que retorne o tipo de veiculo Carro, Moto ou Bike)
+
+*** para passar parametros pela linha de comando base executar Ex: (npm run dev -- --seuparametro), e depois usar o process.argv para pegar
+o parametro passado.
+
+- Abstract Factory
+  PROBLEMA: Pense que nosso sistema está sendo um sucesso e além de atender o UBER vai ter que atender a 99 também, então podemos ter
+diferentes tipos de transporte e diferente tipos de empresas prestando o mesmo serviço como podemos programar isso?
+  SOLUÇÃO: Precisamos declarar interfaces explicitas para cada produto. Ex:(veiculos, aeronaves) assim as variantes poderão seguir essas
+interfaces, depois criaremos uma Abstract Factory com uma lista de métodos de criação comuns para todos produtos da família. Ex(criarVeiculo,
+criarAeronave), esses metódos devem retornar tipos abstratos de produtos representados pelas interfaces que criamos. Ex: (veiculos, aeronaves),
+para cada variante Ex: (uber, 99, ...) vamos ter uma fabrica que vai se basear em uma fabrica abstrata.
+
+*** o retorno de uma Factory é sempre um mesmo tipo de "produto".
+
+- Builder
+  PROBLEMA: Imagine que voce tenha que fazer uma classe que construa um carro, quais paremetros voce vai precisar? agora imagine que chegou
+uma demanda que precisará construir caminhonetes, como ficarao os parametros, se de depois chegar a demanda para construir caminhoes?
+  SOLUÇÃO: Utilizar um builder seria como fazer uma linha de montagem, o que for comum entre os carros pode ser adicionado na linha de cada
+um e o que for especifico fica somente na linha especifica, diretor é o nome de quem tem a responsabilidade de guiar os passos para que
+os builders entreguem o produto final esperado.
+
+*** uma função com mais de 4 paramêtros não é recomendado, começa a perder a clareza
+
+---------- Estruturais ----------
+
+- Adapter
+  PROBLEMA: Imagine que tenhamos um sistema de pagamento no qual efetua pagamentos com PayPal e ja está tudo funcionando corretamente porém
+agora será necessario que funcione tambem com Payonner, como podemos unir essas duas ferramentas que tem métodos diferentes?
+  SOLUÇÃO: Adapter seria um passo que inserimos ali no meio do processo para pegar uma informação que pode vir de jeitos diretentes e devolver
+adaptado para o uso.
+
+- Bridge
+  PROBLEMA: Imagine que voce precise desenvolver um sistema para transmissão de lives, que terá que funcionar com Youtube, Facebook e Twitch,
+como poderemos desenvolver algo para funcionar com essas 3 plataformas?
+  SOLUÇÃO: Podemos usar o bridge para abstrair o que há de comum entre as 3 em vez de criar uma classe gigante com cada método especifico.
+
+*** bridge é semelhante ao adapter porém mais completo não só adaptando os nomes mas como tudo o que tem de comum entre as ferramentas.
+
+---------- Comportamentais ----------
+
+- Chain
+  Chain of responsability é como é chamado o pattern que quebra um fluxo complexo Ex:(Login) em varios passos para que a manutenção fique mais
+fácil, em que cada elo tem uma responsabilidade e se precisar uma um "elo" em outro fluxo não vai ter problema.
